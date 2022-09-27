@@ -32,7 +32,7 @@ const ListItem = ({ item }) => {
   const handleModal = () => setIsModalVisible(() => !isModalVisible);
   return (
     <View style={styles.container}>
-      <StatusBar style="auto" />
+      <StatusBar animated={true} backgroundColor="#353D48" />
       <ImageBackground style={styles.image} source={{ uri: image }} />
       <Button title={name} onPress={handleModal} />
       <Modal visible={isModalVisible}>
@@ -58,10 +58,11 @@ const styles = StyleSheet.create({
     justifyContent: "flex-start",
     alignItems: "center",
     backgroundColor: "#353D48",
-    marginBottom: 10,
+    marginBottom: 5,
     marginRight: 5,
     marginLeft: 5,
     padding: 20,
+    marginTop: 5,
   },
   image: {
     flex: 1,
