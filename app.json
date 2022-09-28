@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "proyectoPrueba",
-    "slug": "proyectoPrueba",
+    "name": "RickAndMortyAPI",
+    "slug": "RickAndMortyAPI",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",

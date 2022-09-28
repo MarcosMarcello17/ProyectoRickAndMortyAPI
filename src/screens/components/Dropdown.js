@@ -1,4 +1,3 @@
-import { StatusBar } from "expo-status-bar";
 import { useState } from "react";
 import {
   SafeAreaView,
@@ -33,7 +32,8 @@ const Dropdown = ({
               <TouchableOpacity
                 key={String(i)}
                 style={{
-                  backgroundColor: "#A49B98",
+                  backgroundColor: "white",
+                  margin: 5,
                   paddingVertical: 8,
                   borderRadius: 4,
                   paddingHorizontal: 6,
@@ -43,7 +43,7 @@ const Dropdown = ({
                   onSelect(val);
                 }}
               >
-                <Text>{val.id == 0 ? "No selection" : val.name}</Text>
+                <Text>{val.id == 0 ? "-" : val.name}</Text>
               </TouchableOpacity>
             );
           })}
@@ -55,7 +55,7 @@ const Dropdown = ({
 
 const styles = StyleSheet.create({
   dropdownStyle: {
-    backgroundColor: "#A49B98",
+    backgroundColor: "grey",
     padding: 8,
     borderRadius: 6,
     minHeight: 42,
