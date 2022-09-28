@@ -1,14 +1,13 @@
-import React from 'react'
-import {View, Text} from 'react-native'
-import { SafeAreaView } from 'react-native-safe-area-context'
-import HomeScreen from './src/screens/HomeScreen'
+import React from "react";
+import { SafeAreaView } from "react-native-safe-area-context";
+import HomeScreen from "./src/screens/HomeScreen";
 
 const App = () => {
-  return(
+  return (
     <SafeAreaView>
-      <HomeScreen/>
+      <HomeScreen />
     </SafeAreaView>
-  )
-}
+  );
+};
 
-export default App
+export default App;
