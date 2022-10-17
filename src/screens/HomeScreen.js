@@ -5,14 +5,13 @@ import {
   FlatList,
   Modal,
   TextInput,
-  StyleSheet,
-  Dimensions,
   TouchableOpacity,
 } from "react-native";
 import Dropdown from "./components/Dropdown";
 import ListItem from "./components/ListItem";
 import Button from "./components/Button";
-
+import { styles, texts, filters } from "./components/styles/HomeScreenStyle.js";
+import FilterScreen from "./components/FilterScreen";
 
 const HomeScreen = () => {
   const status = [
@@ -40,21 +39,16 @@ const HomeScreen = () => {
   var searchurl = "https://rickandmortyapi.com/api/character/";
 
   const getCharacters = () => {
-       fetch(searchurl)
+    fetch(searchurl)
       .then((res) => res.json())
       .then((res) => {
         setcharacters([...characters, ...res.results]);
         setPagsTotal(res.info.pages);
         setcurrentPage(currentPage + 1);
       });
-
-    
-
-      
   };
 
   const loadMoreCharacters = () => {
-
     if (currentPage < pagsTotal) {
       setcurrentPage(currentPage + 1);
       filterResults();
@@ -80,10 +74,6 @@ const HomeScreen = () => {
     getCharacters();
   };
 
-  const selectStatus = (item) => {
-    setSelectedStatus(item);
-  };
-
   const selectGender = (item) => {
     setSelectedGender(item);
   };
@@ -96,20 +86,9 @@ const HomeScreen = () => {
     setSelectedStatus({ id: 0, name: "" });
   };
 
-  const showAll = () => {
-    clearModal();
-    setcurrentPage(1);
-    filterResults();
-  };
-
   const filter = () => {
     setcurrentPage(1);
     filterResults();
-  };
-
-  const clear = () => {
-    setcharacters([]);
-
   };
 
   const filterButtonAction = () => {
@@ -125,13 +104,30 @@ const HomeScreen = () => {
     filterResults();
   }, []);
 
+  const setOptions = (newName, newSpecies, newType, newStatus, newGender) => {
+    setSearchName(newName);
+    setSearchSpecies(newSpecies);
+    setSearchType(newType);
+    setSelectedStatus(newStatus);
+    setSelectedGender(newGender);
+    setSearchPageVisible(false);
+    clearModal();
+    setcurrentPage(1);
+    filterResults();
+  };
+
+  const defaultSearch = () => {
+    setSearchPageVisible(false);
+    clearModal();
+    setcurrentPage(1);
+    filterResults();
+  };
+
   return (
     <View style={{ backgroundColor: "#212226", alignItems: "stretch" }}>
       <View style={styles.header}>
-        <TouchableOpacity
-          style={styles.logoText} 
-        >
-          <Text style={styles.baseText}>R&M</Text>
+        <TouchableOpacity style={texts.logo}>
+          <Text style={texts.base}>R&M</Text>
         </TouchableOpacity>
         <Button onPress={filterButtonAction}>Filters</Button>
       </View>
@@ -144,7 +140,8 @@ const HomeScreen = () => {
         numColumns={2}
       />
       <Modal visible={searchPageVisible} style={{ backgroundColor: "black" }}>
-        <View style={styles.filterHeader}>
+        <FilterScreen onReturn={setOptions} onAbort={defaultSearch} />
+        {/*<View style={filters.filterHeader}>
           <Text style={{ fontSize: 40, color: "white", margin: 20 }}>
             Character Filters
           </Text>
@@ -159,7 +156,7 @@ const HomeScreen = () => {
               }}
             >
               <TextInput
-                style={styles.textInput}
+                style={filters.textInput}
                 defaultValue={searchName}
                 placeholder="Name"
                 onChangeText={(newName) => {
@@ -167,7 +164,7 @@ const HomeScreen = () => {
                 }}
               />
               <TextInput
-                style={styles.textInput}
+                style={filters.textInput}
                 placeholder="Species"
                 defaultValue={searchSpecies}
                 onChangeText={(newSpecies) => {
@@ -175,7 +172,7 @@ const HomeScreen = () => {
                 }}
               />
               <TextInput
-                style={styles.textInput}
+                style={filters.textInput}
                 placeholder="Type"
                 defaultValue={searchType}
                 onChangeText={(newType) => {
@@ -201,7 +198,7 @@ const HomeScreen = () => {
               />
             </View>
           </View>
-          <View style={styles.filterButtons}>
+          <View style={filters.filterButtons}>
             <Button onPress={filter}>Search</Button>
           </View>
 
@@ -215,52 +212,10 @@ const HomeScreen = () => {
           >
             Volver
           </Button>
-        </View>
+          </View>*/}
       </Modal>
     </View>
   );
 };
 
-const styles = StyleSheet.create({
-  baseText: {
-    fontSize: Dimensions.get("window").width / 12,
-    color: "lightgreen",
-    padding: 30,
-    fontWeight: "bold",
-  },
-  logoText: {
-    backgroundColor: "green",
-    fontSize: Dimensions.get("window").width / 12,
-    alignItems: "center",
-    flex: 1,
-    justifyContent: "center",
-    textAlign: "center",
-    color: "lightgreen",
-  },
-
-  imageBackground: {
-    Color: "red",
-  },
-
-  header: {
-    flexDirection: "row",
-  },
-
-  filterButtons: {
-    flexDirection: "column",
-    borderWidth: 1,
-    borderColor: "black",
-  },
-  textInput: {
-    margin: 10,
-    padding: 10,
-    backgroundColor: "white",
-    borderRadius: 5,
-  },
-  filterHeader: {
-    backgroundColor: "black",
-    paddingTop: 50,
-    alignItems: "center",
-  },
-});
 export default HomeScreen;
