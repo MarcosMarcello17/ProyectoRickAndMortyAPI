@@ -5,9 +5,9 @@ import Dropdown from "./Dropdown.js";
 import Button from "./Button";
 
 const FilterScreen = ({ onReturn = () => {}, onAbort = () => {} }) => {
-  const name = "";
-  const style = "";
-  const type = "";
+  var name = "";
+  const [searchSpecies, setSearchSpecies] = useState("");
+  const [searchType, setSearchType] = useState("");
   const [selectedStatus, setSelectedStatus] = useState({ id: 0, name: "" });
   const [selectedGender, setSelectedGender] = useState({ id: 0, name: "" });
   const status = [
@@ -30,7 +30,9 @@ const FilterScreen = ({ onReturn = () => {}, onAbort = () => {} }) => {
     setSelectedGender(item);
   };
   return (
-    <View style={{ backgroundColor: "#212226", alignItems: "stretch" }}>
+    <View
+      style={{ flex: 1, backgroundColor: "#212226", alignItems: "stretch" }}
+    >
       <View style={filters.filterHeader}>
         <Text style={{ fontSize: 40, color: "white", margin: 20 }}>
           Character Filters
@@ -89,7 +91,19 @@ const FilterScreen = ({ onReturn = () => {}, onAbort = () => {} }) => {
           </View>
         </View>
         <View style={filters.filterButtons}>
-          <Button onPress={onReturn}>Search</Button>
+          <Button
+            onPress={() => {
+              onReturn(
+                name,
+                searchSpecies,
+                searchType,
+                selectedStatus,
+                selectedGender
+              );
+            }}
+          >
+            Search
+          </Button>
         </View>
 
         <Button onPress={onAbort}>Volver</Button>

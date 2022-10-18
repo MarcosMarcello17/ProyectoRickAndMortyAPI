@@ -1,41 +1,24 @@
+/*
+NO PUEDE GUARDAR LOS FILTROS Y ENTONCES NO PUEDO VER MAS DE UNA PAGINA
+ */
+
 import React, { useEffect, useState } from "react";
-import {
-  View,
-  Text,
-  FlatList,
-  Modal,
-  TextInput,
-  TouchableOpacity,
-} from "react-native";
-import Dropdown from "./components/Dropdown";
+import { View, Text, FlatList, Modal, TouchableOpacity } from "react-native";
 import ListItem from "./components/ListItem";
 import Button from "./components/Button";
-import { styles, texts, filters } from "./components/styles/HomeScreenStyle.js";
+import { styles, texts } from "./components/styles/HomeScreenStyle.js";
 import FilterScreen from "./components/FilterScreen";
 
 const HomeScreen = () => {
-  const status = [
-    { id: 0, name: "" },
-    { id: 1, name: "alive" },
-    { id: 2, name: "dead" },
-    { id: 3, name: "unknown" },
-  ];
-  const gender = [
-    { id: 0, name: "" },
-    { id: 1, name: "female" },
-    { id: 2, name: "male" },
-    { id: 3, name: "genderless" },
-    { id: 4, name: "unknown" },
-  ];
   const [characters, setcharacters] = useState([]);
   const [currentPage, setcurrentPage] = useState(1);
   const [pagsTotal, setPagsTotal] = useState(0);
-  const [searchName, setSearchName] = useState("");
-  const [searchSpecies, setSearchSpecies] = useState("");
-  const [searchType, setSearchType] = useState("");
   const [searchPageVisible, setSearchPageVisible] = useState(false);
-  const [selectedStatus, setSelectedStatus] = useState({ id: 0, name: "" });
-  const [selectedGender, setSelectedGender] = useState({ id: 0, name: "" });
+  var currentName = "";
+  var currentSpecies = "";
+  var currentStatus = { id: 0, name: "" };
+  var currentGender = { id: 0, name: "" };
+  var currentType = "";
   var searchurl = "https://rickandmortyapi.com/api/character/";
 
   const getCharacters = () => {
@@ -54,73 +37,60 @@ const HomeScreen = () => {
       filterResults();
     }
   };
-  const filterResults = () => {
-    console.log("Buscando");
+  const filterResults = (
+    name = currentName,
+    species = currentSpecies,
+    status = currentStatus,
+    gender = currentGender,
+    type = currentType
+  ) => {
     setSearchPageVisible(false);
+    currentName = name;
+    currentSpecies = species;
+    currentStatus = status;
+    currentGender = gender;
+    currentType = type;
     searchurl =
       "https://rickandmortyapi.com/api/character/?page=" +
       currentPage +
       "&name=" +
-      searchName +
+      name +
       "&species=" +
-      searchSpecies +
+      species +
       "&status=" +
-      selectedStatus.name +
+      status.name +
       "&gender=" +
-      selectedGender.name +
+      gender.name +
       "&type=" +
-      searchType;
-
+      type;
+    console.log(searchurl);
     getCharacters();
-  };
-
-  const selectGender = (item) => {
-    setSelectedGender(item);
-  };
-
-  const clearModal = () => {
-    setSearchName("");
-    setSearchSpecies("");
-    setSearchType("");
-    setSelectedGender({ id: 0, name: "" });
-    setSelectedStatus({ id: 0, name: "" });
-  };
-
-  const filter = () => {
-    setcurrentPage(1);
-    filterResults();
   };
 
   const filterButtonAction = () => {
     setcharacters([]);
     setSearchPageVisible(true);
     setcharacters([]);
-    clearModal;
     setcharacters([]);
     setcurrentPage(1);
   };
 
   useEffect(() => {
-    filterResults();
+    filterResults("", "", { id: 0, name: "" }, { id: 0, name: "" }, "");
   }, []);
 
   const setOptions = (newName, newSpecies, newType, newStatus, newGender) => {
-    setSearchName(newName);
-    setSearchSpecies(newSpecies);
-    setSearchType(newType);
-    setSelectedStatus(newStatus);
-    setSelectedGender(newGender);
+    console.log(newGender.name);
     setSearchPageVisible(false);
-    clearModal();
     setcurrentPage(1);
-    filterResults();
+    filterResults(newName, newSpecies, newStatus, newGender, newType);
+    console.log(currentGender);
   };
 
   const defaultSearch = () => {
     setSearchPageVisible(false);
-    clearModal();
     setcurrentPage(1);
-    filterResults();
+    filterResults("", "", { id: 0, name: "" }, { id: 0, name: "" }, "");
   };
 
   return (
@@ -141,78 +111,6 @@ const HomeScreen = () => {
       />
       <Modal visible={searchPageVisible} style={{ backgroundColor: "black" }}>
         <FilterScreen onReturn={setOptions} onAbort={defaultSearch} />
-        {/*<View style={filters.filterHeader}>
-          <Text style={{ fontSize: 40, color: "white", margin: 20 }}>
-            Character Filters
-          </Text>
-        </View>
-        <View style={{ flex: 1, backgroundColor: "black" }}>
-          <View style={{ backgroundColor: "black", flexDirection: "row" }}>
-            <View
-              style={{
-                backgroundColor: "black",
-                alignItems: "stretch",
-                flex: 1,
-              }}
-            >
-              <TextInput
-                style={filters.textInput}
-                defaultValue={searchName}
-                placeholder="Name"
-                onChangeText={(newName) => {
-                  setSearchName(newName);
-                }}
-              />
-              <TextInput
-                style={filters.textInput}
-                placeholder="Species"
-                defaultValue={searchSpecies}
-                onChangeText={(newSpecies) => {
-                  setSearchSpecies(newSpecies);
-                }}
-              />
-              <TextInput
-                style={filters.textInput}
-                placeholder="Type"
-                defaultValue={searchType}
-                onChangeText={(newType) => {
-                  setSearchType(newType);
-                }}
-              />
-            </View>
-            <View style={{ flex: 1, alignItems: "stretch" }}>
-              <Text style={{ color: "white", fontSize: 30 }}>Status</Text>
-              <Dropdown
-                value={selectedStatus}
-                items={status}
-                name={"Status"}
-                onSelect={selectStatus}
-              />
-              <Text style={{ color: "white", fontSize: 30 }}>Gender</Text>
-              <Dropdown
-                style={{ backgroundColor: "blue" }}
-                value={selectedGender}
-                items={gender}
-                name={"Gender"}
-                onSelect={selectGender}
-              />
-            </View>
-          </View>
-          <View style={filters.filterButtons}>
-            <Button onPress={filter}>Search</Button>
-          </View>
-
-          <Button
-            onPress={() => {
-              setSearchPageVisible(false);
-              clearModal();
-              setcurrentPage(1);
-              filterResults();
-            }}
-          >
-            Volver
-          </Button>
-          </View>*/}
       </Modal>
     </View>
   );
