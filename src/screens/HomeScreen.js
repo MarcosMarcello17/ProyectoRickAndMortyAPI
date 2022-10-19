@@ -1,7 +1,3 @@
-/*
-NO PUEDE GUARDAR LOS FILTROS Y ENTONCES NO PUEDO VER MAS DE UNA PAGINA
- */
-
 import React, { useEffect, useState } from "react";
 import { View, Text, FlatList, Modal, TouchableOpacity } from "react-native";
 import ListItem from "./components/ListItem";
@@ -14,11 +10,11 @@ const HomeScreen = () => {
   const [currentPage, setcurrentPage] = useState(1);
   const [pagsTotal, setPagsTotal] = useState(0);
   const [searchPageVisible, setSearchPageVisible] = useState(false);
-  var currentName = "";
-  var currentSpecies = "";
-  var currentStatus = { id: 0, name: "" };
-  var currentGender = { id: 0, name: "" };
-  var currentType = "";
+  const [currentName, setCurrentName] = useState("");
+  const [currentSpecies, setCurrentSpecies] = useState("");
+  const [currentStatus, setCurrentStatus] = useState({ id: 0, name: "" });
+  const [currentGender, setCurrentGender] = useState({ id: 0, name: "" });
+  const [currentType, setCurrentType] = useState("");
   var searchurl = "https://rickandmortyapi.com/api/character/";
 
   const getCharacters = () => {
@@ -45,11 +41,6 @@ const HomeScreen = () => {
     type = currentType
   ) => {
     setSearchPageVisible(false);
-    currentName = name;
-    currentSpecies = species;
-    currentStatus = status;
-    currentGender = gender;
-    currentType = type;
     searchurl =
       "https://rickandmortyapi.com/api/character/?page=" +
       currentPage +
@@ -79,8 +70,16 @@ const HomeScreen = () => {
     filterResults("", "", { id: 0, name: "" }, { id: 0, name: "" }, "");
   }, []);
 
+  const setCurrentData = (name, species, type, status, gender) => {
+    setCurrentName(name);
+    setCurrentSpecies(species);
+    setCurrentStatus(status);
+    setCurrentGender(gender);
+    setCurrentType(type);
+  };
   const setOptions = (newName, newSpecies, newType, newStatus, newGender) => {
     console.log(newGender.name);
+    setCurrentData(newName, newSpecies, newType, newStatus, newGender);
     setSearchPageVisible(false);
     setcurrentPage(1);
     filterResults(newName, newSpecies, newStatus, newGender, newType);
@@ -90,7 +89,7 @@ const HomeScreen = () => {
   const defaultSearch = () => {
     setSearchPageVisible(false);
     setcurrentPage(1);
-    filterResults("", "", { id: 0, name: "" }, { id: 0, name: "" }, "");
+    filterResults();
   };
 
   return (
