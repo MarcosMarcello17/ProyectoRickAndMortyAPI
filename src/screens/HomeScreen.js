@@ -98,6 +98,9 @@ const HomeScreen = () => {
         <TouchableOpacity style={texts.logo}>
           <Text style={texts.base}>R&M</Text>
         </TouchableOpacity>
+        <Button>Favoritos</Button>
+      </View>
+      <View>
         <Button onPress={filterButtonAction}>Filters</Button>
       </View>
       <FlatList

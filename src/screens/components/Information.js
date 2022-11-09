@@ -3,8 +3,15 @@ import { View, Text, Image, ScrollView } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Button from "./Button";
 import InformationStyle from "./styles/InformationStyle";
+import { ref, set } from "firebase/database";
+import characterDB from "./firebase-config";
 
 const Information = ({ item, onReturn = () => {} }) => {
+  const addToFavorites = () => {
+    set(ref(characterDB, "favorites/" + item.name), {
+      item: item,
+    });
+  };
   return (
     <View style={InformationStyle.modalContainer}>
       <View style={InformationStyle.modalCharacterContainer}>
@@ -48,6 +55,7 @@ const Information = ({ item, onReturn = () => {} }) => {
       </View>
       <View style={{ backgroundColor: "black", margin: 20 }}>
         <Button onPress={onReturn}>Volver</Button>
+        <Button onPress={addToFavorites}>Añadir a Favoritos</Button>
       </View>
     </View>
   );
