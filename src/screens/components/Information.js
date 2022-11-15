@@ -1,16 +1,22 @@
 import React from "react";
-import { View, Text, Image, ScrollView } from "react-native";
+import { View, Text, Image } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Button from "./Button";
 import InformationStyle from "./styles/InformationStyle";
-import { ref, set } from "firebase/database";
+import { onValue, ref } from "firebase/database";
 import characterDB from "./firebase-config";
+import SecondButton from "./SecondButton";
+import Comment from "./Comment";
 
-const Information = ({ item, onReturn = () => {} }) => {
-  const addToFavorites = () => {
-    set(ref(characterDB, "favorites/" + item.name), {
-      item: item,
-    });
+const Information = ({ item, cardType, onReturn = () => {} }) => {
+  const showComments = () => {
+    if (cardType == "favorite") {
+      onValue(ref(characterDB, "favorites/" + item.name), (snapshot) => {
+        snapshot.forEach((doc) => {
+          return doc.child("comments");
+        });
+      });
+    }
   };
   return (
     <View style={InformationStyle.modalContainer}>
@@ -34,28 +40,16 @@ const Information = ({ item, onReturn = () => {} }) => {
           Status: {item.status}
         </Text>
         <SafeAreaView style={InformationStyle.modalDescriptionContainer}>
-          <ScrollView>
-            <Text style={InformationStyle.modalText}>
-              Species: {item.species}
-            </Text>
-            <Text style={InformationStyle.modalText}>
-              Gender: {item.gender}
-            </Text>
-            <Text style={InformationStyle.modalText}>
-              Type: {item.type != "" ? item.type : "undefined"}
-            </Text>
-            <Text style={InformationStyle.modalText}>
-              Origin: {item.origin.name}
-            </Text>
-            <Text style={InformationStyle.modalText}>
-              Location: {item.location.name}
-            </Text>
-          </ScrollView>
+          <Comment
+            style={InformationStyle.modalText}
+            item={item}
+            type={cardType}
+          />
         </SafeAreaView>
       </View>
       <View style={{ backgroundColor: "black", margin: 20 }}>
         <Button onPress={onReturn}>Volver</Button>
-        <Button onPress={addToFavorites}>Añadir a Favoritos</Button>
+        <SecondButton type={cardType} item={item} onReturn={onReturn} />
       </View>
     </View>
   );

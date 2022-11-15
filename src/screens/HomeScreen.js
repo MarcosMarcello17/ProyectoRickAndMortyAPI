@@ -4,8 +4,10 @@ import ListItem from "./components/ListItem";
 import Button from "./components/Button";
 import { styles, texts } from "./components/styles/HomeScreenStyle.js";
 import FilterScreen from "./components/FilterScreen";
+import characterDB from "./components/firebase-config";
+import { onValue, ref } from "firebase/database";
 
-const HomeScreen = () => {
+const HomeScreen = ({ navigation }) => {
   const [characters, setcharacters] = useState([]);
   const [currentPage, setcurrentPage] = useState(1);
   const [pagsTotal, setPagsTotal] = useState(0);
@@ -15,6 +17,7 @@ const HomeScreen = () => {
   const [currentStatus, setCurrentStatus] = useState({ id: 0, name: "" });
   const [currentGender, setCurrentGender] = useState({ id: 0, name: "" });
   const [currentType, setCurrentType] = useState("");
+  var charactersinDB = [];
   var searchurl = "https://rickandmortyapi.com/api/character/";
 
   const getCharacters = () => {
@@ -54,7 +57,6 @@ const HomeScreen = () => {
       gender.name +
       "&type=" +
       type;
-    console.log(searchurl);
     getCharacters();
   };
 
@@ -78,12 +80,10 @@ const HomeScreen = () => {
     setCurrentType(type);
   };
   const setOptions = (newName, newSpecies, newType, newStatus, newGender) => {
-    console.log(newGender.name);
     setCurrentData(newName, newSpecies, newType, newStatus, newGender);
     setSearchPageVisible(false);
     setcurrentPage(1);
     filterResults(newName, newSpecies, newStatus, newGender, newType);
-    console.log(currentGender);
   };
 
   const defaultSearch = () => {
@@ -92,20 +92,49 @@ const HomeScreen = () => {
     filterResults();
   };
 
+  useEffect(() => {
+    filterFavorites();
+  }, [navigation]);
+
+  const filterFavorites = () => {
+    var newCharacters = [];
+    onValue(ref(characterDB, "favorites/"), (snapshot) => {
+      snapshot.forEach((doc) => {
+        charactersinDB.push(doc.child("item/id"));
+        var data = doc.toJSON();
+        charactersinDB.push(data.item.id);
+      });
+    });
+    characters.forEach((element) => {
+      var id = element.id;
+      if (charactersinDB.includes(id)) {
+      } else {
+        newCharacters.push(element);
+      }
+    });
+    return newCharacters;
+  };
+
   return (
     <View style={{ backgroundColor: "#212226", alignItems: "stretch" }}>
       <View style={styles.header}>
         <TouchableOpacity style={texts.logo}>
           <Text style={texts.base}>R&M</Text>
         </TouchableOpacity>
-        <Button>Favoritos</Button>
+        <Button
+          onPress={() => {
+            navigation.navigate("Favorites", {});
+          }}
+        >
+          Favoritos
+        </Button>
       </View>
       <View>
         <Button onPress={filterButtonAction}>Filters</Button>
       </View>
       <FlatList
-        data={characters}
-        renderItem={({ item, index }) => <ListItem item={item} />}
+        data={filterFavorites()}
+        renderItem={({ item, index }) => <ListItem item={item} type="normal" />}
         keyExtractor={(item, index) => String(index)}
         onEndReached={loadMoreCharacters}
         onEndReachedThreshold={0.01}
