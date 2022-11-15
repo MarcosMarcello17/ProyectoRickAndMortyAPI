@@ -1,28 +1,25 @@
 import characterDB from "../components/firebase-config";
 import { onValue, ref, remove, set, update } from "firebase/database";
-const SET_ADD_FAVORITE = "ADD_FAVORITE";
-const DELETE_FAVORITE = "DELETE_FROM_FAVORITES";
-const SET_NEW_COMMENT = "ADD_COMMENT";
 
 const initialState = {
-  item: {},
+  characters: [],
   charComment: "",
 };
 
 const firebaseReducer = (state = initialState, action) => {
   switch (action.type) {
-    case SET_ADD_FAVORITE:
+    case "ADD_FAVORITE":
       console.log("Adding new Favorite");
       set(ref(characterDB, "favorites/" + action.payload.name), {
         comments: "",
         item: action.payload,
       });
       return state;
-    case DELETE_FAVORITE:
+    case "DELETE_FROM_FAVORITES":
       console.log("Deleting favorite");
       remove(ref(characterDB, "favorites/" + action.payload.name));
       return state;
-    case SET_NEW_COMMENT:
+    case "ADD_COMMENT":
       console.log("Adding new Comment");
       const updates = {};
       updates["favorites/" + action.payload.item.name + "/comments"] =
@@ -39,6 +36,15 @@ const firebaseReducer = (state = initialState, action) => {
           ret = snapshot.toJSON();
         }
       );
+      return state;
+    case "GET_ALL_FAVORITES":
+      console.log("Obteniendo favoritos");
+      state.characters = [];
+      onValue(ref(characterDB, "favorites/"), (snapshot) => {
+        snapshot.forEach((doc) => {
+          state.characters.push(doc.child("item/").toJSON());
+        });
+      });
       return state;
     default:
       return state;

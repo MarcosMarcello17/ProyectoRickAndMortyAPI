@@ -3,21 +3,10 @@ import { View, Text, Image } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Button from "./Button";
 import InformationStyle from "./styles/InformationStyle";
-import { onValue, ref } from "firebase/database";
-import characterDB from "./firebase-config";
 import SecondButton from "./SecondButton";
 import Comment from "./Comment";
 
 const Information = ({ item, cardType, onReturn = () => {} }) => {
-  const showComments = () => {
-    if (cardType == "favorite") {
-      onValue(ref(characterDB, "favorites/" + item.name), (snapshot) => {
-        snapshot.forEach((doc) => {
-          return doc.child("comments");
-        });
-      });
-    }
-  };
   return (
     <View style={InformationStyle.modalContainer}>
       <View style={InformationStyle.modalCharacterContainer}>

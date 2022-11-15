@@ -1,6 +1,12 @@
 import React from "react";
 import { View } from "react-native";
 
+const get_favorites = () => {
+  return {
+    type: "GET_ALL_FAVORITES",
+  };
+};
+
 const add_favorite = (item) => {
   const action = {
     type: "ADD_FAVORITE",
@@ -9,21 +15,21 @@ const add_favorite = (item) => {
   return action;
 };
 
-const delete_from_favorites = (item) => (dispatch) => {
-  dispatch({
+const delete_from_favorites = (item) => {
+  return {
     type: "DELETE_FROM_FAVORITES",
     payload: item,
-  });
+  };
 };
 
-const add_comment = (item, comment) => (dispatch) => {
-  dispatch({
-    type: SET_NEW_COMMENT,
+const add_comment = (item, comment) => {
+  return {
+    type: "ADD_COMMENT",
     payload: {
       item: item,
       comment: comment,
     },
-  });
+  };
 };
 
-export default { add_favorite, delete_from_favorites, add_comment };
+export { add_favorite, delete_from_favorites, add_comment, get_favorites };

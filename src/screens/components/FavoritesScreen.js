@@ -4,6 +4,8 @@ import { Text, View, FlatList } from "react-native";
 import characterDB from "./firebase-config";
 import ListItem from "./ListItem";
 import Button from "./Button";
+import store from "../store";
+import { get_favorites } from "../actions/actions";
 
 const FavoritesScreen = ({ route, navigation }) => {
   const { userName } = route.params;
@@ -11,11 +13,8 @@ const FavoritesScreen = ({ route, navigation }) => {
   useEffect(() => {
     const unsuscribe = navigation.addListener("focus", () => {
       setfavCharacter([]);
-      onValue(ref(characterDB, "favorites/"), (snapshot) => {
-        snapshot.forEach((doc) => {
-          setfavCharacter((arr) => [...arr, doc.child("item/").toJSON()]);
-        });
-      });
+      store.dispatch(get_favorites());
+      setfavCharacter(store.getState().firebaseReducer.characters);
     });
     return unsuscribe;
   }, [navigation]);

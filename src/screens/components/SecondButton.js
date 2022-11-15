@@ -3,6 +3,11 @@ import { Modal, View } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
 import Button from "./Button";
 import store from "../store";
+import {
+  add_favorite,
+  delete_from_favorites,
+  add_comment,
+} from "../actions/actions";
 
 const SecondButton = ({ item, type, onReturn = () => {} }) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -13,7 +18,7 @@ const SecondButton = ({ item, type, onReturn = () => {} }) => {
       <View>
         <Button
           onPress={() => {
-            store.dispatch({ type: "ADD_FAVORITE", payload: item });
+            store.dispatch(add_favorite(item));
             onReturn();
           }}
         >
@@ -27,7 +32,7 @@ const SecondButton = ({ item, type, onReturn = () => {} }) => {
         <Button onPress={changeModalVisibility}>Añadir Comentarios</Button>
         <Button
           onPress={() => {
-            store.dispatch({ type: "DELETE_FROM_FAVORITES", payload: item });
+            store.dispatch(delete_from_favorites(item));
             onReturn();
           }}
         >
@@ -40,10 +45,7 @@ const SecondButton = ({ item, type, onReturn = () => {} }) => {
           />
           <Button
             onPress={() => {
-              store.dispatch({
-                type: "ADD_COMMENT",
-                payload: { item: item, comment: comment },
-              });
+              store.dispatch(add_comment(item, comment));
               changeModalVisibility();
               onReturn();
             }}
