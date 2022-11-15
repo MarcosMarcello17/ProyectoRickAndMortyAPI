@@ -2,14 +2,21 @@ import React, { useState } from "react";
 import { Modal, View } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
 import Button from "./Button";
-import store from "../store";
 import {
   add_favorite,
   delete_from_favorites,
   add_comment,
 } from "../actions/actions";
+import { connect } from "react-redux";
 
-const SecondButton = ({ item, type, onReturn = () => {} }) => {
+const SecondButton = ({
+  item,
+  type,
+  onReturn = () => {},
+  add_favorite,
+  delete_from_favorites,
+  add_comment,
+}) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [comment, setComment] = useState("");
   const changeModalVisibility = () => setIsModalVisible(!isModalVisible);
@@ -18,7 +25,7 @@ const SecondButton = ({ item, type, onReturn = () => {} }) => {
       <View>
         <Button
           onPress={() => {
-            store.dispatch(add_favorite(item));
+            add_favorite(item);
             onReturn();
           }}
         >
@@ -32,7 +39,7 @@ const SecondButton = ({ item, type, onReturn = () => {} }) => {
         <Button onPress={changeModalVisibility}>Añadir Comentarios</Button>
         <Button
           onPress={() => {
-            store.dispatch(delete_from_favorites(item));
+            delete_from_favorites(item);
             onReturn();
           }}
         >
@@ -45,7 +52,7 @@ const SecondButton = ({ item, type, onReturn = () => {} }) => {
           />
           <Button
             onPress={() => {
-              store.dispatch(add_comment(item, comment));
+              add_comment(item, comment);
               changeModalVisibility();
               onReturn();
             }}
@@ -58,4 +65,8 @@ const SecondButton = ({ item, type, onReturn = () => {} }) => {
   }
 };
 
-export default SecondButton;
+export default connect(null, {
+  add_favorite,
+  delete_from_favorites,
+  add_comment,
+})(SecondButton);

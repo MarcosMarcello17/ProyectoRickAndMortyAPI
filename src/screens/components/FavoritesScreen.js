@@ -1,11 +1,16 @@
-import { child, get, onValue, ref } from "firebase/database";
 import React, { useEffect, useState } from "react";
-import { Text, View, FlatList } from "react-native";
-import characterDB from "./firebase-config";
+import { View, FlatList } from "react-native";
 import ListItem from "./ListItem";
 import Button from "./Button";
 import store from "../store";
 import { get_favorites } from "../actions/actions";
+import { connect } from "react-redux";
+
+const mapStateToProps = (state) => {
+  return {
+    characters: state.firebaseReducer.characters,
+  };
+};
 
 const FavoritesScreen = ({ route, navigation }) => {
   const { userName } = route.params;
@@ -39,4 +44,4 @@ const FavoritesScreen = ({ route, navigation }) => {
   );
 };
 
-export default FavoritesScreen;
+export default connect(mapStateToProps, { get_favorites })(FavoritesScreen);

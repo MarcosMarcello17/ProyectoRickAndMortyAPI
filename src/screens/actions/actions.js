@@ -1,6 +1,3 @@
-import React from "react";
-import { View } from "react-native";
-
 const get_favorites = () => {
   return {
     type: "GET_ALL_FAVORITES",
