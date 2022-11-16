@@ -18,6 +18,7 @@ const HomeScreen = ({ navigation }) => {
   const [currentGender, setCurrentGender] = useState({ id: 0, name: "" });
   const [currentType, setCurrentType] = useState("");
   var charactersinDB = [];
+  const [newCharacters, setNewCharacters] = useState([]);
   var searchurl = "https://rickandmortyapi.com/api/character/";
 
   const getCharacters = () => {
@@ -92,12 +93,21 @@ const HomeScreen = ({ navigation }) => {
     filterResults();
   };
 
+  const onReturn = () => {
+    setTimeout(() => {
+      filterFavorites();
+    }, 3100);
+  };
+
   useEffect(() => {
-    filterFavorites();
+    const unsuscribe = navigation.addListener("focus", () => {
+      filterFavorites();
+    });
+    return unsuscribe;
   }, [navigation]);
 
   const filterFavorites = () => {
-    var newCharacters = [];
+    setNewCharacters([]);
     onValue(ref(characterDB, "favorites/"), (snapshot) => {
       snapshot.forEach((doc) => {
         charactersinDB.push(doc.child("item/id"));
@@ -105,14 +115,15 @@ const HomeScreen = ({ navigation }) => {
         charactersinDB.push(data.item.id);
       });
     });
+    var charToAdd = [];
     characters.forEach((element) => {
       var id = element.id;
       if (charactersinDB.includes(id)) {
       } else {
-        newCharacters.push(element);
+        charToAdd.push(element);
       }
     });
-    return newCharacters;
+    setNewCharacters(charToAdd);
   };
 
   return (
@@ -133,12 +144,15 @@ const HomeScreen = ({ navigation }) => {
         <Button onPress={filterButtonAction}>Filters</Button>
       </View>
       <FlatList
-        data={filterFavorites()}
-        renderItem={({ item, index }) => <ListItem item={item} type="normal" />}
+        data={newCharacters}
+        renderItem={({ item, index }) => (
+          <ListItem item={item} type="normal" onReturn={onReturn} />
+        )}
         keyExtractor={(item, index) => String(index)}
         onEndReached={loadMoreCharacters}
         onEndReachedThreshold={0.01}
         numColumns={2}
+        extraData={newCharacters}
       />
       <Modal visible={searchPageVisible} style={{ backgroundColor: "black" }}>
         <FilterScreen onReturn={setOptions} onAbort={defaultSearch} />
