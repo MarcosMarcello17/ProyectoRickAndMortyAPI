@@ -133,19 +133,20 @@ const HomeScreen = ({ navigation, charactersDB }) => {
   return (
     <View style={{ backgroundColor: "#212226", alignItems: "stretch" }}>
       <View style={styles.header}>
+        <View>
+          <Button
+            onPress={() => {
+              navigation.navigate("Favorites", {});
+            }}
+          >
+            Favoritos
+          </Button>
+
+          <Button onPress={filterButtonAction}>Filters</Button>
+        </View>
         <TouchableOpacity style={texts.logo}>
           <Text style={texts.base}>R&M</Text>
         </TouchableOpacity>
-        <Button
-          onPress={() => {
-            navigation.navigate("Favorites", {});
-          }}
-        >
-          Favoritos
-        </Button>
-      </View>
-      <View>
-        <Button onPress={filterButtonAction}>Filters</Button>
       </View>
       <FlatList
         data={newCharacters}
