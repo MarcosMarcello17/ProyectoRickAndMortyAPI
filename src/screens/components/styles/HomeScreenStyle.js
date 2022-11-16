@@ -26,5 +26,20 @@ const texts = StyleSheet.create({
     color: "lightgreen",
   },
 });
-
-export { styles, texts };
+const favorites = StyleSheet.create({
+  base: {
+    fontSize: Dimensions.get("window").width / 12,
+    color: "lightgreen",
+    padding: 30,
+    fontWeight: "bold",
+  },
+  logo: {
+    backgroundColor: "green",
+    fontSize: Dimensions.get("window").width / 12,
+    alignItems: "center",
+    justifyContent: "center",
+    textAlign: "center",
+    color: "lightgreen",
+  },
+});
+export { styles, texts, favorites };

@@ -29,4 +29,19 @@ const add_comment = (item, comment) => {
   };
 };
 
-export { add_favorite, delete_from_favorites, add_comment, get_favorites };
+const change_state = (item) => {
+  return {
+    type: "CHANGE_STATE",
+    payload: {
+      item: item,
+    },
+  };
+};
+
+export {
+  add_favorite,
+  delete_from_favorites,
+  add_comment,
+  get_favorites,
+  change_state,
+};

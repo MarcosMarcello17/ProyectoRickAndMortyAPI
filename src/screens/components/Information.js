@@ -5,6 +5,7 @@ import Button from "./Button";
 import InformationStyle from "./styles/InformationStyle";
 import SecondButton from "./SecondButton";
 import Comment from "./Comment";
+import Draggable from "./Draggable";
 
 const Information = ({
   item,
@@ -49,6 +50,9 @@ const Information = ({
           onReturn={onReturn}
           onDelete={onDelete}
         />
+        <View style={{ backgroundColor: "grey", borderRadius: 30 }}>
+          <Draggable color={"darkgrey"} item={item} onDelete={onDelete} />
+        </View>
       </View>
     </View>
   );

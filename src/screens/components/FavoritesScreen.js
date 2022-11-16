@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from "react";
-import { View, FlatList } from "react-native";
+import { View, FlatList, Text } from "react-native";
 import ListItem from "./ListItem";
 import Button from "./Button";
 import store from "../store";
 import { get_favorites } from "../actions/actions";
 import { connect } from "react-redux";
-import { styles, texts } from "./styles/HomeScreenStyle";
+import { TouchableOpacity } from "react-native-gesture-handler";
+import { favorites } from "./styles/HomeScreenStyle";
 
 const FavoritesScreen = ({ route, navigation, characters }) => {
   const { userName } = route.params;
   const [favCharacter, setfavCharacter] = useState([]);
+
   useEffect(() => {
     const unsuscribe = navigation.addListener("focus", () => {
       setfavCharacter([]);
@@ -28,7 +30,10 @@ const FavoritesScreen = ({ route, navigation, characters }) => {
   };
 
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{ flex: 5, backgroundColor: "#212226" }}>
+      <TouchableOpacity style={favorites.logo}>
+        <Text style={favorites.base}>Rick & Morty</Text>
+      </TouchableOpacity>
       <Button
         style={{ flex: 0.1 }}
         onPress={() => {

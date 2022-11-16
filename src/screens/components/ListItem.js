@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { Animated } from "react-native";
 import CharacterCard from "./CharacterCard";
-const ANIMATION_DURATION = 250;
 
 const ListItem = ({ item, type = "normal", onReturn = () => {} }) => {
   const [fadeOut, setFadeOut] = useState(new Animated.Value(1));

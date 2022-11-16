@@ -1,7 +1,9 @@
 import React, { useState } from "react";
-import { Modal, View } from "react-native";
+import { Modal, View, Text, Image } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
 import Button from "./Button";
+import SecondButtonStyle from "./styles/SecondButtonStyle";
+import InformationStyle from "./styles/InformationStyle";
 import {
   add_favorite,
   delete_from_favorites,
@@ -13,6 +15,7 @@ const SecondButton = ({
   item,
   type,
   onReturn = () => {},
+  imageURI,
   add_favorite,
   delete_from_favorites,
   add_comment,
@@ -22,7 +25,7 @@ const SecondButton = ({
   const [comment, setComment] = useState("");
   const changeModalVisibility = () => setIsModalVisible(!isModalVisible);
   if (type == "normal") {
-    return (
+    /*return (
       <View>
         <Button
           onPress={() => {
@@ -33,11 +36,18 @@ const SecondButton = ({
           Añadir a Favoritos
         </Button>
       </View>
+    );*/
+    return (
+      <View style={{ alignItems: "center" }}>
+        <Text style={{ color: "lightgrey" }}>
+          Desliza para añadir a favoritos
+        </Text>
+      </View>
     );
   } else {
     return (
-      <View>
-        <Modal visible={isModalVisible}>
+      <View style={{ alignItems: "center", backgroundColor: "black" }}>
+        {/*<Modal visible={isModalVisible}>
           <TextInput
             style={{
               justifyContent: "center",
@@ -55,16 +65,57 @@ const SecondButton = ({
           >
             Agregar comentario
           </Button>
-        </Modal>
+        </Modal>*/}
         <Button onPress={changeModalVisibility}>Añadir Comentarios</Button>
-        <Button
+        <Text style={{ color: "lightgrey" }}>
+          Desliza para eliminar de favoritos
+        </Text>
+        {/*<Button
           onPress={() => {
             delete_from_favorites(item);
             onDelete();
           }}
         >
           Eliminar de Favoritos
-        </Button>
+        </Button>*/}
+        <Modal visible={isModalVisible}>
+          <View
+            style={{
+              alignItems: "center",
+              backgroundColor: "black",
+              margin: 0,
+              padding: 0,
+            }}
+          >
+            <Image
+              style={InformationStyle.commentModalImage}
+              source={{ uri: item.image }}
+            />
+            <TextInput
+              style={SecondButtonStyle.textStyle}
+              placeholder="Agregar Comentario"
+              onChangeText={(newText) => setComment(newText)}
+            />
+          </View>
+          <View style={SecondButtonStyle.modalContainer}>
+            <Button
+              onPress={() => {
+                add_comment(item, comment);
+                //onReturn();
+              }}
+            >
+              Agregar comentario
+            </Button>
+            <Button onPress={changeModalVisibility}>Volver</Button>
+          </View>
+          <View
+            style={{ backgroundColor: "black", flex: 1, alignItems: "center" }}
+          >
+            <Text style={{ padding: 20, fontSize: 40, color: "white" }}>
+              {item.name}
+            </Text>
+          </View>
+        </Modal>
       </View>
     );
   }

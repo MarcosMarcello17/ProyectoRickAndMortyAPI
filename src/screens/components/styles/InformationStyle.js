@@ -35,6 +35,20 @@ const InformationStyle = StyleSheet.create({
 
     alignItems: "center",
   },
+  commentModalImage: {
+    //margin: "3%",
+    //marginTop: "12%",
+
+    borderWidth: 5,
+    borderColor: "lightblue",
+    marginTop: 80,
+    width: "100%",
+    height: "60%",
+    aspectRatio: 1,
+
+    alignItems: "center",
+  },
+
   aliveModalImage: {
     margin: "3%",
     marginTop: "12%",

@@ -10,7 +10,7 @@ const ButtonStyle = StyleSheet.create({
     borderColor: "lightgreen",
     paddingHorizontal: 30,
     marginHorizontal: 20,
-    marginVertical: 30,
+    marginVertical: 5,
   },
   textStyle: {
     alignSelf: "center",
