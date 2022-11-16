@@ -6,7 +6,12 @@ import InformationStyle from "./styles/InformationStyle";
 import SecondButton from "./SecondButton";
 import Comment from "./Comment";
 
-const Information = ({ item, cardType, onReturn = () => {} }) => {
+const Information = ({
+  item,
+  cardType,
+  onReturn = () => {},
+  onDelete = () => {},
+}) => {
   return (
     <View style={InformationStyle.modalContainer}>
       <View style={InformationStyle.modalCharacterContainer}>
@@ -38,7 +43,12 @@ const Information = ({ item, cardType, onReturn = () => {} }) => {
       </View>
       <View style={{ backgroundColor: "black", margin: 20 }}>
         <Button onPress={onReturn}>Volver</Button>
-        <SecondButton type={cardType} item={item} onReturn={onReturn} />
+        <SecondButton
+          type={cardType}
+          item={item}
+          onReturn={onReturn}
+          onDelete={onDelete}
+        />
       </View>
     </View>
   );

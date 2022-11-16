@@ -11,7 +11,7 @@ import {
 import Information from "./Information";
 import CharacterCardStyle from "./styles/CharacterCardStyle";
 
-const CharacterCard = ({ item, cardType = "normal" }) => {
+const CharacterCard = ({ item, cardType = "normal", onDelete = () => {} }) => {
   const {
     id,
     name,
@@ -27,7 +27,13 @@ const CharacterCard = ({ item, cardType = "normal" }) => {
     created,
   } = item;
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const handleModal = () => setIsModalVisible(() => !isModalVisible);
+  const handleModal = () => {
+    setIsModalVisible(() => !isModalVisible);
+  };
+  const onDeleteCC = () => {
+    setIsModalVisible(!isModalVisible);
+    onDelete();
+  };
   return (
     <View style={CharacterCardStyle.container}>
       <StatusBar style="auto" />
@@ -57,7 +63,12 @@ const CharacterCard = ({ item, cardType = "normal" }) => {
       </TouchableOpacity>
 
       <Modal visible={isModalVisible} animationType="slide">
-        <Information item={item} onReturn={handleModal} cardType={cardType} />
+        <Information
+          item={item}
+          onReturn={handleModal}
+          cardType={cardType}
+          onDelete={onDeleteCC}
+        />
       </Modal>
     </View>
   );

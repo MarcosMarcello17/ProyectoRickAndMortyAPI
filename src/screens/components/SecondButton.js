@@ -16,6 +16,7 @@ const SecondButton = ({
   add_favorite,
   delete_from_favorites,
   add_comment,
+  onDelete = () => {},
 }) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [comment, setComment] = useState("");
@@ -26,7 +27,7 @@ const SecondButton = ({
         <Button
           onPress={() => {
             add_favorite(item);
-            onReturn();
+            onDelete();
           }}
         >
           Añadir a Favoritos
@@ -40,7 +41,7 @@ const SecondButton = ({
         <Button
           onPress={() => {
             delete_from_favorites(item);
-            onReturn();
+            onDelete();
           }}
         >
           Eliminar de Favoritos
