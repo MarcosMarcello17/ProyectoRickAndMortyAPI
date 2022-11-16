@@ -102,7 +102,7 @@ const HomeScreen = ({ navigation, charactersDB }) => {
   const onReturn = () => {
     setTimeout(() => {
       filterFavorites();
-    }, 3100);
+    }, 2100);
   };
 
   useEffect(() => {

@@ -8,12 +8,12 @@ const ListItem = ({ item, type = "normal", onReturn = () => {} }) => {
   const onDelete = () => {
     Animated.timing(fadeOut, {
       toValue: 0,
-      duration: 3000,
+      duration: 2000,
       useNativeDriver: true,
     }).start();
     Animated.timing(move, {
       toValue: -1000,
-      duration: 3000,
+      duration: 2000,
       useNativeDriver: true,
     }).start();
     onReturn();
