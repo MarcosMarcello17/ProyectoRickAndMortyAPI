@@ -1,5 +1,13 @@
 import characterDB from "../components/firebase-config";
-import { onValue, ref, remove, set, update } from "firebase/database";
+import {
+  child,
+  get,
+  onValue,
+  ref,
+  remove,
+  set,
+  update,
+} from "firebase/database";
 
 const initialState = {
   characters: [],
@@ -46,6 +54,25 @@ const firebaseReducer = (state = initialState, action) => {
         });
       });
       return state;
+    case "CHANGE_STATE":
+      console.log("changing state");
+
+      get(
+        child(ref(characterDB), "favorites/" + action.payload.item.name)
+      ).then((snapshot) => {
+        console.log(snapshot);
+        if (snapshot.exists()) {
+          console.log("Deleting favorite");
+          remove(ref(characterDB, "favorites/" + action.payload.item.name));
+        } else {
+          console.log("Adding new Favorite");
+          set(ref(characterDB, "favorites/" + action.payload.item.name), {
+            comments: "",
+            item: action.payload.item,
+          });
+        }
+      });
+
     default:
       return state;
   }

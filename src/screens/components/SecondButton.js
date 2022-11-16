@@ -101,7 +101,7 @@ const SecondButton = ({
             <Button
               onPress={() => {
                 add_comment(item, comment);
-                //onReturn();
+                onReturn();
               }}
             >
               Agregar comentario
