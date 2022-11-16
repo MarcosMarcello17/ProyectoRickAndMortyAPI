@@ -6,15 +6,16 @@ import { createDrawerNavigator } from "@react-navigation/drawer";
 import { NavigationContainer } from "@react-navigation/native";
 import HomeScreen from "./HomeScreen";
 import FavoritesScreen from "./components/FavoritesScreen";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
 const AppExpo = ({}) => {
-  const drawer = createDrawerNavigator();
+  const Stack = createNativeStackNavigator();
   return (
     <NavigationContainer>
-      <drawer.Navigator initialRouteName="Characters">
-        <drawer.Screen name="Characters" component={HomeScreen} />
-        <drawer.Screen name="Favorites" component={FavoritesScreen} />
-      </drawer.Navigator>
+      <Stack.Navigator initialRouteName="Characters">
+        <Stack.Screen name="Characters" component={HomeScreen} />
+        <Stack.Screen name="Favorites" component={FavoritesScreen} />
+      </Stack.Navigator>
     </NavigationContainer>
   );
 };
