@@ -5,9 +5,15 @@ const ANIMATION_DURATION = 250;
 
 const ListItem = ({ item, type = "normal", onReturn = () => {} }) => {
   const [fadeOut, setFadeOut] = useState(new Animated.Value(1));
+  const [move, setMove] = useState(new Animated.Value(0));
   const onDelete = () => {
     Animated.timing(fadeOut, {
       toValue: 0,
+      duration: 3000,
+      useNativeDriver: true,
+    }).start();
+    Animated.timing(move, {
+      toValue: -1000,
       duration: 3000,
       useNativeDriver: true,
     }).start();
@@ -15,7 +21,7 @@ const ListItem = ({ item, type = "normal", onReturn = () => {} }) => {
   };
 
   return (
-    <Animated.View style={{ opacity: fadeOut }}>
+    <Animated.View style={{ opacity: fadeOut, translateY: move }}>
       <CharacterCard item={item} cardType={type} onDelete={onDelete} />
     </Animated.View>
   );

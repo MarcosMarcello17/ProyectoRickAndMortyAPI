@@ -5,6 +5,7 @@ import Button from "./Button";
 import store from "../store";
 import { get_favorites } from "../actions/actions";
 import { connect } from "react-redux";
+import { styles, texts } from "./styles/HomeScreenStyle";
 
 const FavoritesScreen = ({ route, navigation, characters }) => {
   const { userName } = route.params;
