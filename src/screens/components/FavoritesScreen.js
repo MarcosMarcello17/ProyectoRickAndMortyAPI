@@ -6,22 +6,9 @@ import store from "../store";
 import { get_favorites } from "../actions/actions";
 import { connect } from "react-redux";
 
-const mapStateToProps = (state) => {
-  return {
-    characters: state.firebaseReducer.characters,
-  };
-};
-
-const FavoritesScreen = ({ route, navigation }) => {
+const FavoritesScreen = ({ route, navigation, characters }) => {
   const { userName } = route.params;
   const [favCharacter, setfavCharacter] = useState([]);
-  const onDelete = () => {
-    setTimeout(() => {
-      setfavCharacter([]);
-      store.dispatch(get_favorites());
-      setfavCharacter(store.getState().firebaseReducer.characters);
-    }, 3100);
-  };
   useEffect(() => {
     const unsuscribe = navigation.addListener("focus", () => {
       setfavCharacter([]);
@@ -30,18 +17,17 @@ const FavoritesScreen = ({ route, navigation }) => {
     });
     return unsuscribe;
   }, [navigation]);
+
+  const onDelete = () => {
+    setTimeout(() => {
+      setfavCharacter([]);
+      store.dispatch(get_favorites());
+      setfavCharacter(store.getState().firebaseReducer.characters);
+    }, 3100);
+  };
+
   return (
     <View style={{ flex: 1 }}>
-      <FlatList
-        style={{ flex: 0.9 }}
-        data={favCharacter}
-        renderItem={({ item, index }) => (
-          <ListItem item={item} type="favorite" onReturn={onDelete} />
-        )}
-        keyExtractor={(item, index) => String(index)}
-        numColumns={2}
-        extraData={favCharacter}
-      />
       <Button
         style={{ flex: 0.1 }}
         onPress={() => {
@@ -50,8 +36,23 @@ const FavoritesScreen = ({ route, navigation }) => {
       >
         HomeScreen
       </Button>
+      <FlatList
+        style={{ flex: 0.9 }}
+        data={favCharacter}
+        renderItem={({ item, index }) => (
+          <ListItem item={item} type="favorite" onReturn={onDelete} />
+        )}
+        keyExtractor={(item, index) => String(index)}
+        numColumns={2}
+      />
     </View>
   );
+};
+
+const mapStateToProps = (state) => {
+  return {
+    characters: state.firebaseReducer.characters,
+  };
 };
 
 export default connect(mapStateToProps, { get_favorites })(FavoritesScreen);

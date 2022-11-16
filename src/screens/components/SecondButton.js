@@ -37,17 +37,12 @@ const SecondButton = ({
   } else {
     return (
       <View>
-        <Button onPress={changeModalVisibility}>Añadir Comentarios</Button>
-        <Button
-          onPress={() => {
-            delete_from_favorites(item);
-            onDelete();
-          }}
-        >
-          Eliminar de Favoritos
-        </Button>
         <Modal visible={isModalVisible}>
           <TextInput
+            style={{
+              justifyContent: "center",
+              alignItems: "center",
+            }}
             placeholder="Comentario"
             onChangeText={(newText) => setComment(newText)}
           />
@@ -61,6 +56,15 @@ const SecondButton = ({
             Agregar comentario
           </Button>
         </Modal>
+        <Button onPress={changeModalVisibility}>Añadir Comentarios</Button>
+        <Button
+          onPress={() => {
+            delete_from_favorites(item);
+            onDelete();
+          }}
+        >
+          Eliminar de Favoritos
+        </Button>
       </View>
     );
   }

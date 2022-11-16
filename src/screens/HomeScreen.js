@@ -4,11 +4,11 @@ import ListItem from "./components/ListItem";
 import Button from "./components/Button";
 import { styles, texts } from "./components/styles/HomeScreenStyle.js";
 import FilterScreen from "./components/FilterScreen";
-import characterDB from "./components/firebase-config";
-import { onValue, ref } from "firebase/database";
+import store from "./store";
+import { get_favorites } from "./actions/actions";
+import { connect } from "react-redux";
 
-const HomeScreen = ({ navigation }) => {
-  const [characters, setcharacters] = useState([]);
+const HomeScreen = ({ navigation, charactersDB }) => {
   const [currentPage, setcurrentPage] = useState(1);
   const [pagsTotal, setPagsTotal] = useState(0);
   const [searchPageVisible, setSearchPageVisible] = useState(false);
@@ -20,6 +20,7 @@ const HomeScreen = ({ navigation }) => {
   var charactersinDB = [];
   const [newCharacters, setNewCharacters] = useState([]);
   var searchurl = "https://rickandmortyapi.com/api/character/";
+  const [characters, setcharacters] = useState([]);
 
   const getCharacters = () => {
     fetch(searchurl)
@@ -30,6 +31,10 @@ const HomeScreen = ({ navigation }) => {
         setcurrentPage(currentPage + 1);
       });
   };
+
+  useEffect(() => {
+    filterFavorites();
+  }, [characters]);
 
   const loadMoreCharacters = () => {
     if (currentPage < pagsTotal) {
@@ -71,6 +76,7 @@ const HomeScreen = ({ navigation }) => {
 
   useEffect(() => {
     filterResults("", "", { id: 0, name: "" }, { id: 0, name: "" }, "");
+    filterFavorites();
   }, []);
 
   const setCurrentData = (name, species, type, status, gender) => {
@@ -101,6 +107,7 @@ const HomeScreen = ({ navigation }) => {
 
   useEffect(() => {
     const unsuscribe = navigation.addListener("focus", () => {
+      filterResults("", "", { id: 0, name: "" }, { id: 0, name: "" }, "");
       filterFavorites();
     });
     return unsuscribe;
@@ -108,12 +115,9 @@ const HomeScreen = ({ navigation }) => {
 
   const filterFavorites = () => {
     setNewCharacters([]);
-    onValue(ref(characterDB, "favorites/"), (snapshot) => {
-      snapshot.forEach((doc) => {
-        charactersinDB.push(doc.child("item/id"));
-        var data = doc.toJSON();
-        charactersinDB.push(data.item.id);
-      });
+    store.dispatch(get_favorites());
+    store.getState().firebaseReducer.characters.forEach((element) => {
+      charactersinDB.push(element.id);
     });
     var charToAdd = [];
     characters.forEach((element) => {
@@ -152,7 +156,6 @@ const HomeScreen = ({ navigation }) => {
         onEndReached={loadMoreCharacters}
         onEndReachedThreshold={0.01}
         numColumns={2}
-        extraData={newCharacters}
       />
       <Modal visible={searchPageVisible} style={{ backgroundColor: "black" }}>
         <FilterScreen onReturn={setOptions} onAbort={defaultSearch} />
@@ -161,4 +164,10 @@ const HomeScreen = ({ navigation }) => {
   );
 };
 
-export default HomeScreen;
+const mapStateToProps = (state) => {
+  return {
+    charactersDB: state.firebaseReducer.characters,
+  };
+};
+
+export default connect(mapStateToProps, { get_favorites })(HomeScreen);
