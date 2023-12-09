@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { View, FlatList, Text } from "react-native";
+import { View, FlatList, Text, TouchableOpacity } from "react-native";
 import ListItem from "./ListItem";
 import Button from "./Button";
 import store from "../store";
 import { get_favorites } from "../actions/actions";
 import { connect } from "react-redux";
-import { TouchableOpacity } from "react-native-gesture-handler";
 import { favorites } from "./styles/HomeScreenStyle";
 
 const FavoritesScreen = ({ route, navigation, characters }) => {

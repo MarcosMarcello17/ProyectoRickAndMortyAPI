@@ -1,4 +1,3 @@
-import "react-native-gesture-handler";
 import React from "react";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import { Provider } from "react-redux";

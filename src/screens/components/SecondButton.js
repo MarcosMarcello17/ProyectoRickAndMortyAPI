@@ -1,6 +1,9 @@
 import React, { useState } from "react";
 import { Modal, View, Text, Image } from "react-native";
-import { TextInput } from "react-native-gesture-handler";
+import {
+  GestureHandlerRootView,
+  TextInput,
+} from "react-native-gesture-handler";
 import Button from "./Button";
 import SecondButtonStyle from "./styles/SecondButtonStyle";
 import InformationStyle from "./styles/InformationStyle";
@@ -79,7 +82,7 @@ const SecondButton = ({
           Eliminar de Favoritos
         </Button>*/}
         <Modal visible={isModalVisible}>
-          <View
+          <GestureHandlerRootView
             style={{
               alignItems: "center",
               backgroundColor: "black",
@@ -96,7 +99,7 @@ const SecondButton = ({
               placeholder="Agregar Comentario"
               onChangeText={(newText) => setComment(newText)}
             />
-          </View>
+          </GestureHandlerRootView>
           <View style={SecondButtonStyle.modalContainer}>
             <Button
               onPress={() => {
