@@ -1,10 +1,18 @@
 import React from "react";
-import { View, Text, Image, ScrollView } from "react-native";
+import { View, Text, Image } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Button from "./Button";
 import InformationStyle from "./styles/InformationStyle";
+import SecondButton from "./SecondButton";
+import Comment from "./Comment";
+import Draggable from "./Draggable";
 
-const Information = ({ item, onReturn = () => {} }) => {
+const Information = ({
+  item,
+  cardType,
+  onReturn = () => {},
+  onDelete = () => {},
+}) => {
   return (
     <View style={InformationStyle.modalContainer}>
       <View style={InformationStyle.modalCharacterContainer}>
@@ -27,27 +35,24 @@ const Information = ({ item, onReturn = () => {} }) => {
           Status: {item.status}
         </Text>
         <SafeAreaView style={InformationStyle.modalDescriptionContainer}>
-          <ScrollView>
-            <Text style={InformationStyle.modalText}>
-              Species: {item.species}
-            </Text>
-            <Text style={InformationStyle.modalText}>
-              Gender: {item.gender}
-            </Text>
-            <Text style={InformationStyle.modalText}>
-              Type: {item.type != "" ? item.type : "undefined"}
-            </Text>
-            <Text style={InformationStyle.modalText}>
-              Origin: {item.origin.name}
-            </Text>
-            <Text style={InformationStyle.modalText}>
-              Location: {item.location.name}
-            </Text>
-          </ScrollView>
+          <Comment
+            style={InformationStyle.modalText}
+            item={item}
+            type={cardType}
+          />
         </SafeAreaView>
       </View>
       <View style={{ backgroundColor: "black", margin: 20 }}>
         <Button onPress={onReturn}>Volver</Button>
+        <SecondButton
+          type={cardType}
+          item={item}
+          onReturn={onReturn}
+          onDelete={onDelete}
+        />
+        <View style={{ backgroundColor: "grey", borderRadius: 30 }}>
+          <Draggable color={"darkgrey"} item={item} onDelete={onDelete} />
+        </View>
       </View>
     </View>
   );

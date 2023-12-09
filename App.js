@@ -1,12 +1,14 @@
 import React from "react";
-import { SafeAreaView } from "react-native-safe-area-context";
-import HomeScreen from "./src/screens/HomeScreen";
+import { createDrawerNavigator } from "@react-navigation/drawer";
+import { Provider } from "react-redux";
+import AppExpo from "./src/screens/AppExpo";
+import store from "./src/screens/store";
 
 const App = () => {
   return (
-    <SafeAreaView>
-      <HomeScreen />
-    </SafeAreaView>
+    <Provider store={store}>
+      <AppExpo />
+    </Provider>
   );
 };
 
